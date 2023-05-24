@@ -1,0 +1,218 @@
+
+# Ahmed Shakib Reza
+# id: 21101219
+# sec: 1
+
+
+
+# 1(a)
+
+def factorial(n):
+  if n == 0 or n == 1:
+    return 1
+  else:
+    return n*factorial(n-1)
+
+
+factorial(5)
+
+# 1(b)
+
+def fib(n):
+  if n == 0:
+    return 0
+  if n == 1 or n == 2:
+    return 1
+  else:
+    return fib(n-1) + fib(n-2)
+
+fib(7)
+
+
+# 1(c)
+
+def showArr(arr, i = 0):
+  
+  if i == len(arr) :
+    #print(arr[i]) 
+    return
+  else:
+    print(arr[i])
+    showArr(arr,i = i+1)
+
+arr1 = [10,20,30,40]
+showArr(arr1)
+
+
+# 1(d)
+
+def pow(base,n):
+  if n == 0:
+    return 1
+  else:
+    return base*pow(base,n-1)
+
+pow(7,2)
+
+# 2 (a)
+
+def binaryOf(n):
+  if n == 0:
+    return
+  else:
+    binaryOf(int(n/2))
+    print(n%2,end="")
+
+binaryOf(10)
+
+
+
+# 2 (b+c)
+
+class Node:
+  def __init__(self,data):
+    self.data = data
+    self.next = None
+
+class LinkedList:
+  sum = 0
+  def __init__(self):
+    self.head = None 
+    #pass
+
+  def sum(self,h):       # 2(b)
+    if h.next == None:
+      return h.data
+    else:
+      return h.data + self.sum(h.next)
+
+  def revp(self,h):      # 2(c)
+    if h.next == None:
+      print(h.data)
+    else:
+      self.revp(h.next)
+      print(h.data)
+
+
+    
+
+n1 = Node(5) 
+
+linked_list_1 = LinkedList() 
+
+
+linked_list_1.head = n1
+
+n2 = Node(10) 
+
+n1.next = n2 
+
+n3 = Node(15)
+
+n2.next = n3 
+
+n4 = Node(20)
+
+n3.next = n4
+
+
+print(linked_list_1.sum(n1))
+print()
+linked_list_1.revp(n1)
+
+
+
+
+#3
+def hocBuilder(height):
+    c=0
+    if height<=0:
+        return "Building house is not possible"
+    elif height==1:
+        return 8
+    elif height>1:
+        
+        c=hocBuilder(height-1)+5
+        #c=8+(height-1)
+    return c
+
+print(hocBuilder(1))
+print(hocBuilder(3))
+
+
+# 4(a)
+
+def pattern_Left(s,i = 1):
+  if i >s :
+    return
+  else:
+    num(i)  
+
+    print()
+    pattern_Left(s,i = i+1)
+
+def num(n):
+  if n==0:
+    return
+  num(n-1)
+  print(n,end=" ")
+
+pattern_Left(6)
+
+
+#4 (b)
+def pattern_Right(s,i = 1):
+
+  if s <= 0 :
+    return
+  else:
+    space(s)
+    num(i)  
+
+    print()
+
+    pattern_Right(s-1,i = i+1)
+
+
+def space(n,j = 1):
+  
+  if n==j or n==0:
+    return
+  else:
+    space(n, j = j+1 )
+    print(" ",end=" ")
+
+def num(n):
+  if n==0:
+    return
+  num(n-1)
+  print(n,end=" ")
+
+pattern_Right(6)
+
+
+#5
+
+class FinalQ:
+    def print(self,array,idx):
+        if(idx<len(array)):
+            profit = self.calcProfit(array[idx])
+            print(idx+1 , ". Investment: " , array[idx] , "; Profit: " , profit)
+            self.print(array, idx+1)
+
+    def calcProfit(self,investment):
+        if investment==25000:
+            return 0.0
+        elif 25000 < investment < 26000:
+            return 4.5+float(self.calcProfit(investment-100))
+        elif 26000 <= investment <= 100000:
+            return 45+float(self.calcProfit(investment-1000))
+        elif 100000 < investment < 101000:
+            return 8+float(self.calcProfit(investment-100))
+        elif investment>=101000:
+            return 80+float(self.calcProfit(investment-1000))
+
+#Tester 5
+array = [25000,100000,250000,350000]
+f = FinalQ()
+f.print(array, 0)

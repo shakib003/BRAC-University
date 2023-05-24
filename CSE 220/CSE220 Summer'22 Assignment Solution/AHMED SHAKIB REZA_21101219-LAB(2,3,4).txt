@@ -1,0 +1,508 @@
+
+
+#========================================================ASSIGNMENT 2===================================================
+
+class CircularArray:
+  def __init__(self, lin, st, sz):
+    # Initializing Variables
+    self.start = st
+    self.size = sz
+    self.cir = [0]*len(lin)
+    
+    for i in range(len(lin)):
+      self.cir[self.start]=lin[i]
+      self.start+=1
+      if self.start>=len(lin):
+        self.start=0
+  
+ 
+  
+  # Print from index 0 to len(cir) - 1
+  def printFullLinear(self): #Easy
+    # To Do
+    self.result=""
+    for elem in range(len(self.cir)):
+        self.result+=str(self.cir[elem])+","
+    print(self.result[:-1])
+  
+ 
+ 
+  # Print from start index and total size elements
+  def printForward(self): #Easy
+    x=""
+    l=self.start
+    for i in range(self.size):
+        x+=str(self.cir[self.start])+","
+        self.start+=1
+        if self.start>=len(self.cir):
+            self.start=(self.start)%len(self.cir)
+    print(x[:-1])
+    self.start=l
+    
+
+  
+  def printBackward(self): #Easy
+    x=""
+    index=(self.start+self.size-1)%len(self.cir)
+    for i in range(self.size):
+        x+=str(self.cir[index])+","
+        index-=1
+        if index<=0:
+            index=len(self.cir)-1
+    print(x[:-1])
+  
+  
+  
+  # With no null cells
+  def linearize(self): #Medium
+    lin_arr=[None]*self.size  
+    k = self.start
+    for i in range(self.size):
+    
+      lin_arr[i]=self.cir[k]
+      k=(k+1)%len(self.cir)
+    self.cir=lin_arr  
+    return self.cir
+  
+  
+  
+  # Do not change the Start index
+  def resizeStartUnchanged(self, newcapacity): #Medium
+    new_capa=newcapacity
+    i=self.start
+    c=[None]*new_capa
+    j=i
+    while i<=self.size:
+      c[i]=self.cir[j]
+      i+=1
+      j+=1
+      if j==self.size:
+        j=0
+    self.cir=c
+  
+  
+  
+  # This method will check whether the array is palindrome or not
+  def palindromeCheck(self): #Hard
+    temp = [0] * self.size
+    result = True
+    for x in range(self.size):
+        if (self.start + x) < len(self.cir):
+            temp[x] = self.cir[self.start + x]
+        else:
+            temp[x] = self.cir[x - (len(self.cir) - self.start)]
+    for y in range(self.size // 2):
+        if temp[y] != temp[-(y + 1)]:
+            result = False
+        else:
+            pass
+    if result==True:
+      print("This array is a palindrome")
+    else:
+      print("This array is not a palindrome")
+
+  
+  
+  # This method will sort the values by keeping the start unchanged
+  def sort(self):
+        list_x = self.cir
+        for i in range(len(list_x)):
+            for j in range(i + 1, len(list_x)):
+                if list_x[i] != None and list_x[j] != None:
+                    if list_x[i] > list_x[j]:
+                        list_x[i], list_x[j] = list_x[j], list_x[i]
+        cx = CircularArray(list_x, self.start, self.size)  
+        self.cir = cx.cir
+  
+  
+  
+  # This method will check the given array across the base array and if they are equivalent interms of values return true, or else return false
+  def equivalent(self, cir_arr):
+    if self.size!=cir_arr.size: 
+      return False
+    for elem in range(len(self.cir)):
+      if self.cir[elem] not in cir_arr.cir:
+        return False
+    return True
+
+  
+  
+  # the method take another circular array and returns a linear array containing the common elements between the two circular arrays.
+  def intersection(self, c2):
+        x = self.start
+        y = c2.start
+        list1 = []
+        list2 = []
+        list3 = []
+
+        def count(list, k):
+            count_r = 0
+            for i in list:
+                if i == k:
+                    count_r += 1
+            return count_r
+        for i in range(len(self.cir)):
+            if self.cir[x] != None:
+                list1 += [self.cir[x]]
+            x = (x + 1) % len(self.cir)
+        for i in range(len(c2.cir)):
+            if c2.cir[y] != None:
+                list2 += [c2.cir[y]]
+            y = (y + 1) % len(c2.cir)
+        z = []
+        for u in list1:
+            if u not in z:
+                z += [u]
+        for k in z:
+            mx = count(list1, k)
+            mn = count(list2, k)
+            if mx > 0 and mn> 0:
+                if mx - mn == 0:
+                    for i in range(mn):
+                        list3 += [k]
+
+                elif mx - mn > 0:
+                    for elem in range(mx - mn):
+                        list3 += [k]
+
+                elif mx - mn < 0:
+                    for elem in range(mx):
+                        list3 += [k]
+        return list3    
+
+
+#====================================ASSIGNMENT 3========================================================================================
+
+
+
+
+class Node:
+    def __init__(self, e, n):
+        self.element = e
+        self.next = n
+class LinkedList:
+    
+  
+    def __init__(self, a):
+        
+  #  Design the constructor based on data type of a. If 'a' is built in python list then
+  #  Creates a linked list using the values from the given array. head will refer
+  #  to the Node that contains the element from a[0]
+  #  Else Sets the value of head. head will refer
+  # to the given LinkedList
+
+        if type(a) == list:
+            self.head = None
+            tail = None
+            for i in range(0,len(a)):
+                node_1 = Node(a[i],None)
+                if self.head == None:
+                    self.head = node_1
+                    tail = node_1
+                else:
+                    tail.next = node_1
+                    tail = node_1
+        else:
+            self.head = a
+  
+  # Count the number of nodes in the list
+    def countNode(self):
+    # To Do
+        temp = self.head
+        count = 0
+        while temp != None:
+            count += 1
+            temp = temp.next
+        return count
+  
+  # Print elements in the list
+    def printList(self):
+    
+        temp = self.head
+        p = ''
+        while temp != None:
+            p += str(temp.element) + ', '
+            temp = temp.next
+        print(p[:-2])
+
+  # returns the reference of the Node at the given index. For invalid index return None.
+    def nodeAt(self, idx):
+        temp = self.head
+        count = 0
+        while temp != None:
+            count += 1
+            temp = temp.next
+        if idx < 0 or idx >= count:
+            return None
+        else:
+            temp = self.head
+        for i in range(0,idx):
+            temp = temp.next
+        return temp
+  # returns the element of the Node at the given index. For invalid idx return None.
+    def get(self, idx):
+        temp = self.head
+        count = 0
+        while temp != None:
+            count += 1
+            temp = temp.next
+        if idx < 0 or idx >= count:
+            return None
+        else:
+            temp = self.head
+        for i in range(0,idx):
+            temp = temp.next
+        return temp.element
+  
+  # updates the element of the Node at the given index. 
+  # Returns the old element that was replaced. For invalid index return None.
+  # parameter: index, element
+    def set(self, idx, elem):
+        temp = self.head
+        count = 0
+        while temp != None:
+            count += 1
+            temp = temp.next
+
+        if idx < 0 or idx >= count:
+            return None
+        else:
+            temp = self.head
+            for _ in range(idx):
+                temp = temp.next
+            if temp:
+                x = temp.element
+                temp.element = elem
+            return x
+        return False
+
+
+  # returns the index of the Node containing the given element.
+  # if the element does not exist in the List, return -1.
+    def indexOf(self, elem):
+        temp = self.head
+        count_0 = 0
+        while temp != None:
+            if temp.element == elem:
+                return count_0
+            temp = temp.next
+            count_0 += 1
+        return -1
+  
+  # returns true if the element exists in the List, return false otherwise.
+    def contains(self, elem):
+        temp = self.head
+        while temp != None:
+            if temp.element == elem:
+                return True
+            temp = temp.next
+        return False
+
+  # Makes a duplicate copy of the given List. Returns the reference of the duplicate list.
+    def copyList(self):
+        copy_head = self.head
+        copy_tail = self.head
+        while copy_tail != None:
+            copy_tail = copy_tail.next
+        return copy_head
+
+  # Makes a reversed copy of the given List. Returns the head reference of the reversed list.
+    def reverseList(self):
+        temp = self.head
+        new = None
+    
+        while temp is not None:
+            current_node = temp
+            temp = temp.next
+            
+            if new is None:
+                current_node.next = None
+                new = current_node
+                
+            else:
+                current_node.next = new
+                new= current_node
+        self.head = new
+        return self.head
+  # inserts Node containing the given element at the given index
+  # Check validity of index.
+    def insert(self, elem, idx):
+        temp = self.head
+        count = 0
+        while temp != None:
+            count += 1
+            temp = temp.next
+
+        if idx < 0 or idx == None:
+            print("Invalid index")
+        if idx == 0:
+            new_node = Node(elem, self.head)
+            self.head = new_node
+        else:
+            var= 1
+            temp= self.head
+            while temp:
+                if var== idx:
+                    new_node = Node(elem, temp.next)
+                    temp.next = new_node
+                temp= temp.next
+                var+= 1
+  # removes Node at the given index. returns element of the removed node.
+  # Check validity of index. return None if index is invalid.
+    def remove(self, idx):
+        pass
+               
+
+
+ 
+  # Rotates the list to the left by 1 position.
+    def rotateLeft(self):
+        temp = self.head
+        while temp.next != None:
+            temp = temp.next
+
+        a = self.head
+        temp.next = self.head
+        self.head = a.next
+        a.next = None  
+  
+  # Rotates the list to the right by 1 position.
+    def rotateRight(self):
+        temp = self.head
+        while temp.next != None:
+            temp = temp.next
+        a = self.head
+        while a.next != temp:
+            a = a.next
+        temp.next = self.head
+        self.head = temp
+        a.next = None    
+    
+    
+
+#=========================================================ASSIGNMENT 4====================================================================================
+
+
+
+class Node:
+    def __init__(self, e, n, p):
+        self.element = e
+        self.next = n
+        self.prev = p
+
+
+class DoublyList:
+  
+    def __init__(self, a):
+        if type(a)==list:
+            self.head = Node(None,None,None)
+            tail = self.head
+            previous = self.head
+            for i in range(len(a)):
+                x = Node(a[i],None,None)
+                tail.next = x
+                tail = x
+                x.prev = previous
+                previous = x
+            tail.next = self.head
+            self.head.prev = tail
+        else:
+            self.head = a  
+  # Counts the number of Nodes in the list
+    def countNode(self):
+        n=self.head.prev
+        count=0
+        while n!=self.head:
+            count+=1
+            n=n.prev
+        return count
+  
+  # prints the elements in the list
+    def forwardprint(self):
+        n=self.head.next
+        y=""
+        while n!= self.head:
+            y += f"{n.element},"
+            n = n.next
+        print(y[:-1])
+  # prints the elements in the list backward
+    def backwardprint(self):
+        n=self.head.prev
+        y=""
+        while n!=self.head:
+            y+=f"{n.element},"
+            n=n.prev
+        print(y[:-1])
+  # returns the reference of the at the given index. For invalid index return None.
+    def nodeAt(self, idx):
+        n=self.head.next
+        if (idx<0) or (idx>self.countNode()) or (idx==None):
+            return None
+        else:
+            i=0
+            while n!=self.head:
+                if i==idx:
+                    return n
+                else:
+                    n=n.next
+                    i+=1
+  
+  # returns the index of the containing the given element. if the element does not exist in the List, return -1.
+    def indexOf(self, elem):
+        n=self.head.next
+        count=0
+        while n!=self.head:
+            if n.element==elem:
+                return count
+            else:
+                count+=1
+                n=n.next
+        return -1
+
+  # inserts containing the given element at the given index Check validity of index. 
+    def insert(self, elem, idx):
+        if (idx<0) or (idx>self.countNode()) or (idx==None):
+            return None
+        else:
+            new_node=Node(elem,None,None)
+            head=self.head.next
+            i=0
+            while i<idx:
+                head=head.next
+                i+=1
+        prev_node=head.prev
+        new_node.next=head
+        head.prev=new_node
+        new_node.prev=prev_node
+        prev_node.next=new_node
+    
+    def remove(self, idx):
+        temp = self.head.next
+        count = 0
+        while temp != self.head:
+            count += 1
+            temp = temp.next
+        if idx < 0 or idx >= count:
+            return None
+
+        else:
+            if idx == 0:
+                if count == 0: 
+                    return None
+                temp=self.head.next
+                self.head.next=temp.next
+                temp.next.prev=self.head
+                return str(temp.element)
+            elif idx == count - 1:
+                temp=self.head.prev
+                self.head.prev=temp.prev
+                temp.prev.next=self.head
+                return str(temp.element)
+            else:
+                temp=self.nodeAt(idx)
+                temp.prev.next=temp.next
+                temp.next.prev=temp.prev
+                return str(temp.element)
+    
+
+
